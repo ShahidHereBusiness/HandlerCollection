@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34601.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOAV", "SOAV\SOAV.csproj", "{24FEAAAD-444A-4EEA-8F2B-ACE7A7E8CA72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UTPSOAV", "UTPSOAV\UTPSOAV.csproj", "{161D6392-A413-4339-A895-7638F5BC3904}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{24FEAAAD-444A-4EEA-8F2B-ACE7A7E8CA72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24FEAAAD-444A-4EEA-8F2B-ACE7A7E8CA72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24FEAAAD-444A-4EEA-8F2B-ACE7A7E8CA72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24FEAAAD-444A-4EEA-8F2B-ACE7A7E8CA72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{161D6392-A413-4339-A895-7638F5BC3904}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{161D6392-A413-4339-A895-7638F5BC3904}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{161D6392-A413-4339-A895-7638F5BC3904}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{161D6392-A413-4339-A895-7638F5BC3904}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {72034A1B-E52B-4E16-B4CD-1CF05084E406}
+	EndGlobalSection
+EndGlobal
