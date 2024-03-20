@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SOAV
 {
@@ -22,15 +23,15 @@ namespace SOAV
         /// <returns></returns>
         public static string Zip(string str)
         {
-            var bytes = Encoding.UTF8.GetBytes(str);
-            using (var msi = new MemoryStream(bytes))
-            using (var mso = new MemoryStream())
+            byte[] buffer = Encoding.UTF8.GetBytes(str);
+
+            using (MemoryStream ms = new MemoryStream())
             {
-                using (var gs = new GZipStream(mso, CompressionMode.Compress))
+                using (DeflateStream deflateStream = new DeflateStream(ms, CompressionMode.Compress, true))
                 {
-                    CopyTo(msi, gs);
+                    deflateStream.Write(buffer, 0, buffer.Length);
                 }
-                return Encoding.UTF8.GetString(mso.ToArray());
+                return Convert.ToBase64String(ms.ToArray());
             }
         }
         /// <summary>
@@ -41,15 +42,18 @@ namespace SOAV
         /// <returns></returns>
         public static string Unzip(string str)
         {
-            byte[] bytes = Encoding.UTF8.GetBytes(str);
-            using (var msi = new MemoryStream(bytes))
-            using (var mso = new MemoryStream())
+            byte[] compressedData = Convert.FromBase64String(str);
+            using (MemoryStream ms = new MemoryStream(compressedData))
             {
-                using (var gs = new GZipStream(msi, CompressionMode.Decompress))
+                using (DeflateStream deflateStream = new DeflateStream(ms, CompressionMode.Decompress))
                 {
-                    CopyTo(gs, mso);
+                    using (MemoryStream decompressedMs = new MemoryStream())
+                    {
+                        deflateStream.CopyTo(decompressedMs);
+                        byte[] decompressedBytes = decompressedMs.ToArray();
+                        return Encoding.UTF8.GetString(decompressedBytes);
+                    }
                 }
-                return Encoding.UTF8.GetString(mso.ToArray());
             }
         }
         /// <summary>
@@ -60,7 +64,7 @@ namespace SOAV
         /// <param name="filePath"></param>
         /// <param name="extension"></param>
         /// <returns></returns>
-        public static bool SaveByteArrayToFile(byte[] fileContent, string filePath="\\fileName", string extension= ".xlsx")
+        public static bool SaveByteArrayToFile(byte[] fileContent, string filePath = "\\fileName", string extension = ".xlsx")
         {
             if (fileContent.Length > 0 && !string.IsNullOrEmpty(filePath))
             {
@@ -82,6 +86,5 @@ namespace SOAV
                 dest.Write(bytes, 0, cnt);
             }
         }
-
     }
 }
