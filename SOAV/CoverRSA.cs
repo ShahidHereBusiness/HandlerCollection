@@ -33,7 +33,7 @@ namespace SOAV
                 rsa.FromXmlString(privateKey);
                 byte[] decryptedData = rsa.Decrypt(encryptedData, false);
                 string decryptedString = Encoding.UTF8.GetString(decryptedData);
-                decryptedString = Compression.Unzip(decryptedString);
+                decryptedString = Compression.UnZip(decryptedString);
                 return decryptedString;
             }
         }

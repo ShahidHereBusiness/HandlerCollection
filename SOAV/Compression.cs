@@ -40,7 +40,7 @@ namespace SOAV
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string Unzip(string str)
+        public static string UnZip(string str)
         {
             byte[] compressedData = Convert.FromBase64String(str);
             using (MemoryStream ms = new MemoryStream(compressedData))
@@ -74,17 +74,6 @@ namespace SOAV
             else
                 return false;
             return true;
-        }
-        private static void CopyTo(Stream src, Stream dest)
-        {
-            byte[] bytes = new byte[4096];
-
-            int cnt;
-
-            while ((cnt = src.Read(bytes, 0, bytes.Length)) != 0)
-            {
-                dest.Write(bytes, 0, cnt);
-            }
         }
     }
 }

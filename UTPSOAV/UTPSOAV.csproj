@@ -61,6 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTestCompression.cs" />
+    <Compile Include="UnitTestCoverAES.cs" />
     <Compile Include="UnitTestEncrypt.cs" />
     <Compile Include="UnitTestEventLog.cs" />
     <Compile Include="UnitTestISDN.cs" />
