@@ -1,7 +1,17 @@
 ﻿namespace SOAV.Include
 {
+    /// <summary>
+    /// Solution Developer:
+    /// SOA Enumeration
+    /// </summary>
     public static class Enumeration
     {
+        public enum FlagEnum
+        {
+            MarkRead = 1,
+            KeepUnRead = 0,
+            IsAttachment = 2
+        }
         public enum ResponseEnum
         {
             IntializationError = -9,

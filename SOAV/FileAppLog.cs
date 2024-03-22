@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.Remoting.Contexts;
 using System.Security.Policy;
 using static SOAV.Include.ExceptionMapping;
-using static SOAV.Enumeration;
+using static SOAV.Include.Enumeration;
 
 namespace SOAV
 {

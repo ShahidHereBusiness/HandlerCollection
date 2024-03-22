@@ -62,12 +62,11 @@
     <Compile Include="CoverEncryption.cs" />
     <Compile Include="CoverRSA.cs" />
     <Compile Include="EFOraclePLSQL.cs" />
-    <Compile Include="Enumeration.cs" />
+    <Compile Include="Include\Enumeration.cs" />
     <Compile Include="EventAppLog.cs" />
     <Compile Include="FileAppLog.cs" />
     <Compile Include="HandleMarshalling.cs" />
     <Compile Include="HandleThreading.cs" />
-    <Compile Include="Include\Enumeration.cs" />
     <Compile Include="Include\ExceptionMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityHeader.cs" />
