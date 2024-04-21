@@ -82,12 +82,10 @@ namespace SOAV
                 }
                 return plaintext;
             }
-            catch (Exception ex)
+            catch
             {
-                if (ex.ToString().Length > 0)
-                    return string.Empty;
+                return string.Empty;
             }
-            return string.Empty;
         }
         public static byte[] EncryptByteArrayAES(byte[] plainBytes)
         {

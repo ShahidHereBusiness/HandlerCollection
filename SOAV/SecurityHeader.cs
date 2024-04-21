@@ -65,7 +65,7 @@ namespace SOAV
                 if (!string.IsNullOrEmpty(msg))
                 {
                     string logInput = $"SOAV Configuration Exception Details => Security Header TimeSpan: {DateTime.Now.ToString("yyyyMMddHHmmssfff")}{Environment.NewLine} SOAV => SOAV.dll => Error Message:{msg}, Parameters: AccessSpecifier:{AccessSpecifier},WatchWord:{WatchWords}{Environment.NewLine}{string.Join("|", accessUserArray)}{Environment.NewLine}{string.Join("|", watchPassArray)}";
-                    FileAppLog.FSLog(Path, "SecurityHeader.Authentication", logInput, true, exp);
+                    LogManager.FileSystemLog(Path, "SecurityHeader.Authentication", logInput, true, exp);
                 }
             }
         }
@@ -134,7 +134,7 @@ namespace SOAV
                 if (!string.IsNullOrEmpty(msg))
                 {
                     string logInput = $"SOAV Authentication Exception Details => Security Header TimeSpan: {DateTime.Now.ToString("yyyyMMddHHmmssfff")}{Environment.NewLine} SOAV => SOAV.dll => Error Message:{errorMsg}, Parameters: AccessSpecifier:{AccessSpecifier},WatchWord:{WatchWords}{Environment.NewLine}{string.Join("|", accessUserArray)}{Environment.NewLine}{string.Join("|", watchPassArray)}";
-                    FileAppLog.FSLog(Path, "SecurityHeader.Authentication", logInput, true, exp);
+                    LogManager.FileSystemLog(Path, "SecurityHeader.Authentication", logInput, true, exp);
                 }
             }
             return false;

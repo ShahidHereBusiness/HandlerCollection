@@ -7,7 +7,7 @@ namespace SOAV
     /// Solution Developer:
     ///  Application and Services Logging in Windows Event Viewer App
     /// </summary>
-    public class EventAppLog : IDisposable
+    public class LogEventViewer : IDisposable
     {
         System.Diagnostics.EventLog eventLog = null; // EventLog Object
         /// <summary>
@@ -31,7 +31,7 @@ namespace SOAV
         /// Constructor Method
         /// Windows -> Event Viewer -> Application and Services Logs
         /// </summary>
-        public EventAppLog(string source = "SOAevents", string logName = "SOAlogEvents")
+        public LogEventViewer(string source = "SOAevents", string logName = "SOAlogEvents")
         {
             this.ProcessNameId = 5175;// Default Value Assignment
             this.ProcessNameCode = 101;// Default Value Assignment
@@ -44,7 +44,7 @@ namespace SOAV
                     source,// Source
                     logName// Log Name
                     );
-            }            
+            }
         }
         /// <summary>
         /// Solution Developer:
@@ -61,13 +61,12 @@ namespace SOAV
             {
                 eventLog.Source = source;
                 // Write a new entry to the source.
-                eventLog.WriteEntry($"{this.ProcessStage}: {this.ProcessName}:: {msg}-{timeStr}", EventLogEntryType.Information, this.ProcessNameId, this.ProcessNameCode,null);
+                eventLog.WriteEntry($"{this.ProcessStage}: {this.ProcessName}:: {msg}-{timeStr}", EventLogEntryType.Information, this.ProcessNameId, this.ProcessNameCode, null);
                 flag = true;
             }
-            catch (Exception ex)
+            catch
             {
-                if (ex.Message.Length > 0)
-                    flag = false;
+                flag = false;
             }
             return flag;
         }
@@ -94,10 +93,9 @@ namespace SOAV
                 }
                 flag = true;
             }
-            catch (Exception ex)
+            catch
             {
-                if (ex.Message.Length > 0)
-                    flag = false;
+                flag = false;
             }
             return flag;
         }
@@ -125,10 +123,9 @@ namespace SOAV
                 }
                 flag = true;
             }
-            catch (Exception ex)
+            catch
             {
-                if (ex.Message.Length > 0)
-                    flag = false;
+                flag = false;
             }
             return flag;
         }
@@ -147,7 +144,7 @@ namespace SOAV
         /// Solution Developer:
         /// Destructor Method
         /// </summary>
-        ~EventAppLog()
+        ~LogEventViewer()
         {
             this.eventLog = null;
             GC.Collect();

@@ -62,35 +62,35 @@ namespace SOAV
                         { throw new Exception($"ParameterName {paramDynamic[0, j]} Empty Not Allowed"); }
                         try
                         { addParam.ParameterName = paramDynamic[0, j].ToString();/*Name: p_date*/ }
-                        catch (Exception ex) { if (ex.Message.Length > 0) throw new Exception($"ParameterName {paramDynamic[0, j]} Invalid"); }
+                        catch { throw new Exception($"ParameterName {paramDynamic[0, j]} Invalid"); }
 
                         //#2 Explicit Casting for Parameter OracleDbType
                         if (!int.TryParse(paramDynamic[1, j], out OracleDbTypeEnum))
                         { throw new Exception($"OracleDbType {paramDynamic[0, j]}:{paramDynamic[1, j]} Numeric Verify Failed"); }
                         try
                         { addParam.OracleDbType = (OracleDbType)OracleDbTypeEnum;/*OracleDbType: OracleDbType.Varchar2*/ }
-                        catch (Exception ex) { if (ex.Message.Length > 0) throw new Exception($"OracleDbType {paramDynamic[0, j]}:{paramDynamic[1, j]} Invalid"); }
+                        catch { throw new Exception($"OracleDbType {paramDynamic[0, j]}:{paramDynamic[1, j]} Invalid"); }
 
                         //#3 Explicit Casting for Parameter Size
                         if (!int.TryParse(paramDynamic[2, j], out OracleDbTypeSize))
                         { throw new Exception($"Size {paramDynamic[0, j]}:{paramDynamic[2, j]} Numeric Verify Failed"); }
                         try
                         { addParam.Size = OracleDbTypeSize;/*Size: 8*/ }
-                        catch (Exception ex) { if (ex.Message.Length > 0) throw new Exception($"OracleDbTypeSize {paramDynamic[0, j]}:{paramDynamic[2, j]} Invalid"); }
+                        catch { throw new Exception($"OracleDbTypeSize {paramDynamic[0, j]}:{paramDynamic[2, j]} Invalid"); }
 
                         //#4 Validate for empty Parameter Value
                         if (paramDynamic[3, j].ToString().Length <= 0)
                         { throw new Exception($"Value {paramDynamic[0, j]}:{paramDynamic[3, j]} Empty Not Allowed"); }
                         try
                         { addParam.Value = paramDynamic[3, j];/*Value: 20230419*/ }
-                        catch (Exception ex) { if (ex.Message.Length > 0) throw new Exception($"OracleDbTypeValue {paramDynamic[0, j]}:{paramDynamic[3, j]} Invalid"); }
+                        catch { throw new Exception($"OracleDbTypeValue {paramDynamic[0, j]}:{paramDynamic[3, j]} Invalid"); }
 
                         //#5 Explicit Casting for Parameter Direction
                         if (!int.TryParse(paramDynamic[4, j], out directionEnum))
                         { throw new Exception($"Direction {paramDynamic[0, j]}:{paramDynamic[4, j]} Numeric Verify Failed"); }
                         try
                         { addParam.Direction = (ParameterDirection)directionEnum;/*Direction: ParameterDirection.Input*/ }
-                        catch (Exception ex) { if (ex.Message.Length > 0) throw new Exception($"OracleDbTypeDirection {paramDynamic[0, j]}:{paramDynamic[4, j]} Invalid"); }
+                        catch { throw new Exception($"OracleDbTypeDirection {paramDynamic[0, j]}:{paramDynamic[4, j]} Invalid"); }
 
                         cmd.Parameters.Add(addParam);/*Add*/
                         addParam = null;// Reset Object.
@@ -141,7 +141,7 @@ namespace SOAV
             }
             catch (Exception ex)
             {
-                if (ex.Message.Length > 0) msg = ex.Message;// Exception Handling
+                msg = ex.Message;// Exception Handling
             }
             finally
             {
@@ -198,9 +198,9 @@ namespace SOAV
                     flag = true;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                if (ex.Message.Length > 0) flag = false;
+                flag = false;
             }
             return flag;
         }

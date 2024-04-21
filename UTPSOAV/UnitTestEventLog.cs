@@ -15,7 +15,7 @@ namespace UTPSOAV
         [TestMethod]
         public void TestMethod3AppAndServicesEventLog()
         {
-            using (EventAppLog asl = new EventAppLog())
+            using (LogEventViewer asl = new LogEventViewer())
             {
                 Boolean flag;
 
@@ -41,7 +41,7 @@ namespace UTPSOAV
         [TestMethod]
         public void TestMethod4AppAndServicesRead()
         {
-            using (EventAppLog asl = new EventAppLog())
+            using (LogEventViewer asl = new LogEventViewer())
             {
                 Boolean flag;
 
@@ -69,7 +69,7 @@ namespace UTPSOAV
         [TestMethod]
         public void TestMethod5AppAndServicesDelete()
         {
-            using (EventAppLog asl = new EventAppLog())
+            using (LogEventViewer asl = new LogEventViewer())
             {
                 Boolean flag;
                 // Get User Consent

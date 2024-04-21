@@ -42,6 +42,9 @@
     <DelaySign>false</DelaySign>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Oracle.DataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Include\Oracle.DataAccess.dll</HintPath>
@@ -56,15 +59,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Component\HttpClientSOA.cs" />
     <Compile Include="Compression.cs" />
     <Compile Include="CoverAES.cs" />
     <Compile Include="CoverDelegates.cs" />
     <Compile Include="CoverEncryption.cs" />
     <Compile Include="CoverRSA.cs" />
     <Compile Include="EFOraclePLSQL.cs" />
+    <Compile Include="EnvironmentState.cs" />
     <Compile Include="Include\Enumeration.cs" />
-    <Compile Include="EventAppLog.cs" />
-    <Compile Include="FileAppLog.cs" />
+    <Compile Include="LogEventViewer.cs" />
+    <Compile Include="LogManager.cs" />
     <Compile Include="HandleMarshalling.cs" />
     <Compile Include="HandleThreading.cs" />
     <Compile Include="Include\ExceptionMapping.cs" />
@@ -76,6 +81,7 @@
     <Content Include="Include\Oracle.DataAccess.dll" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="SOAV.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

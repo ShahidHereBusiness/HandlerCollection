@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SOAV;
 using System;
-using static SOAV.FileAppLog;
+using static SOAV.LogManager;
 
 namespace UTPSOAV
 {
@@ -16,13 +17,13 @@ namespace UTPSOAV
             int resultant;
             //HandleRemoteAddress = "::1";
             // Missed Fodler Reference atleats one postfix "\\"
-            resultant = FSLog("UTP", "HelloWorld", "M|N|O|P");
+            resultant =FileSystemLog("UTP", "HelloWorld", "M|N|O|P");
             Console.WriteLine($"Resultant:{resultant}");// Return Overview
             // Request Logging
-            resultant = FSLog("UTP\\", "HelloWorld", "M|N|O|P");
+            resultant = FileSystemLog("UTP\\", "HelloWorld", "M|N|O|P");
             Console.WriteLine($"Resultant:{resultant}");// Return Overview
             // Response Logging
-            resultant = FSLog("D:\\LOGS\\UTP\\", "HelloWorld", "M|N|O|P|R");
+            resultant = FileSystemLog("D:\\LOGS\\UTP\\", "HelloWorld", "M|N|O|P|R", true);
             Console.WriteLine($"Resultant:{resultant}");// Return Overview            
         }
         /// <summary>
@@ -34,10 +35,10 @@ namespace UTPSOAV
             Boolean flag;
             RemoteAddress = "::1";
             // Request Logging
-            flag = EVAppLog("Request|M|N|O|P");
+            flag = EventViewerAppLog("M|N|O|P");
             Console.WriteLine($"Flag:{flag}");// Return Overview
             // Response Logging
-            flag = EVAppLog("Response|M|N|O|P|R");
+            flag = EventViewerAppLog("M|N|O|P|R", true);
             Console.WriteLine($"Flag:{flag}");// Return Overview
         }
     }

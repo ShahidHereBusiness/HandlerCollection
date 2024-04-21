@@ -43,7 +43,7 @@ namespace SOAV
                 if (ex.ToString().Length > 0)
                 {
                     path += "\\Exception\\";
-                    FileAppLog.FSLog(path, "Validatation", "Exception", true, ex);
+                    LogManager.FileSystemLog(path, "Validatation", "Exception", true, ex);
                     return true;
                 }
             }
