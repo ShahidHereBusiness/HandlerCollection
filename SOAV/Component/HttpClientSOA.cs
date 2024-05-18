@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using static SOAV.Include.Enumeration;
+using static SOAV.XMLObjectSOA;
 using Newtonsoft.Json;
 using System.Xml.Serialization;
 using SOAV.Include;
@@ -32,15 +33,15 @@ namespace SOAV.Component
         public static string WSSAccessSpecifier { get; set; }
         public static string WSSWatchWord { get; set; }
         public static SecurityProtocolType TLS { get; set; }
-        public static async Task<Object> ConnectServiceREST<C, R>(C requestObj, R responseObj)
+        public static async Task<(Object, String)> ConnectServiceREST<I, R>(I requestObj, R responseObj)
         {
             #region Validation & Initialization
-            //if (string.IsNullOrEmpty(ServiceName))
-            //    return ErrorFormat("ServiceName Required");
-            //if (string.IsNullOrEmpty(ServiceUri))
-            //    return ErrorFormat("ServiceUri Required");
-            //if (requestObj == null)
-            //    return ErrorFormat("Request Creation Required");
+            if (string.IsNullOrEmpty(ServiceName))
+                return (null, "ServiceName Required");
+            if (string.IsNullOrEmpty(ServiceUri))
+                return (null, "ServiceUri Required");
+            if (requestObj == null)
+                return (null, "Request Creation Required");
             if (StartTime == null)
                 StartTime = DateTime.Now;
             if (string.IsNullOrEmpty(LogID))
@@ -79,6 +80,10 @@ namespace SOAV.Component
                     }
                     // Headers Content Type
                     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(contentType));
+                    // Serialize Object to REST
+                    string contentData = JsonConvert.SerializeObject(requestObj);
+                    // Content Type
+                    StringContent contents = new StringContent(contentData, Encoding.UTF8, contentType);
                     #region SPM
                     // Set for Large Data Sending
                     if (SPMContinue)
@@ -89,10 +94,6 @@ namespace SOAV.Component
                     if (SkipCertificate)
                         ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;// Supress SSL Certificate
                     #endregion
-                    // Serialize Object to REST
-                    string contentData = JsonConvert.SerializeObject(requestObj);
-                    // Content Type
-                    StringContent contents = new StringContent(contentData, Encoding.UTF8, contentType);
                     // Send a POST await request
                     HttpResponseMessage msg = await httpClient.PostAsync(ServiceUri, contents).ConfigureAwait(false);
                     // Read POST Web Response                    
@@ -108,7 +109,7 @@ namespace SOAV.Component
                     else
                         throw new Exception(msg.ToString());
 
-                    return responseObj;
+                    return (responseObj, string.Empty);
                 }
             }
             catch (Exception ex)
@@ -130,17 +131,17 @@ namespace SOAV.Component
                 LogManager.FileSystemLog(LogPath, "HttpClientSOA:ConnectServiceREST", logResponse, true);
                 #endregion
             }
-            return null;
+            return (null, "Unknown Error");
         }
-        public static async Task<Object> ConnectServiceSOAP<C, R>(C requestObj, R responseObj)
+        public static async Task<(Object, String)> ConnectServiceSOAP<I, R>(I requestObj, R responseObj, Dictionary<string, string> Tags = null)
         {
             #region Validation & Initialization
-            //if (string.IsNullOrEmpty(ServiceName))
-            //    return ErrorFormat("ServiceName Required");
-            //if (string.IsNullOrEmpty(ServiceUri))
-            //    return ErrorFormat("ServiceUri Required");
-            //if (requestObj == null)
-            //    return ErrorFormat("Request Creation Required");
+            if (string.IsNullOrEmpty(ServiceName))
+                return (null, "ServiceName Required");
+            if (string.IsNullOrEmpty(ServiceUri))
+                return (null, "ServiceUri Required");
+            if (requestObj == null)
+                return (null, "Request Creation Required");
             if (StartTime == null)
                 StartTime = DateTime.Now;
             if (string.IsNullOrEmpty(LogID))
@@ -168,7 +169,7 @@ namespace SOAV.Component
                     // Set the content type
                     httpClient.DefaultRequestHeaders.Add("ContentType", contentType);
                     // Serialize Object to SOAP
-                    string contentData = SerializeObjectToXml(requestObj);
+                    string contentData = (Tags == null) ? SerializeObjectToXml(requestObj) : SerializeObjectToXml(requestObj, Tags);
                     HttpContent content = new StringContent(contentData, Encoding.UTF8, contentType);
                     // Create a new HttpRequestMessage
                     HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, ServiceUri);
@@ -207,7 +208,7 @@ namespace SOAV.Component
                     else
                         throw new Exception(msg.ToString());
 
-                    return responseObj;
+                    return (responseObj, string.Empty);
                 }
             }
             catch (Exception ex)
@@ -229,7 +230,7 @@ namespace SOAV.Component
                 LogManager.FileSystemLog(LogPath, "HttpClientSOA:ConnectServiceSOAP", logResponse, true);
                 #endregion
             }
-            return null;
+            return (null, "Unknown Error");
         }
         //private static async Task<Object> RESTWSSConnectService<T>(T requestData)
         //{
@@ -357,39 +358,6 @@ namespace SOAV.Component
         //        FileAppLog.FSLog(LogPath, "HttpClientSOA:ConnectRESTService", logResponse, true);
         //        #endregion
         //    }
-        //}
-        /// <summary>
-        /// Object to SOAP string
-        /// </summary>
-        /// <typeparam name="T">Source Object Type</typeparam>
-        /// <param name="obj">Objecr</param>
-        /// <returns>string</returns>
-        private static string SerializeObjectToXml<T>(T obj)
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
-
-            using (StringWriter writer = new StringWriter())
-            {
-                serializer.Serialize(writer, obj);
-                return Regex.Replace(
-                    Regex.Replace(writer.ToString(), @"\t|\n|\r", string.Empty),
-                    @"(<=>).*(=<)", string.Empty);
-            }
-        }
-        /// <summary>
-        /// SOAP string to Object
-        /// </summary>
-        /// <typeparam name="T">Target Object Type</typeparam>
-        /// <param name="xmlString">string</param>
-        /// <returns>Object</returns>
-        private static T DeserializeXmlToObject<T>(string xmlString)
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
-
-            using (StringReader reader = new StringReader(xmlString))
-            {
-                return (T)serializer.Deserialize(reader);
-            }
-        }
+        //}       
     }
 }

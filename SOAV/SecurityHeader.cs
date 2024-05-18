@@ -16,6 +16,7 @@ namespace SOAV
         /// Watch Words Pass Key String
         /// </summary>
         public string WatchWords { set; get; }
+        public char Delimiter { set; get; } = '|';
         /// <summary>
         /// Solution Developer:
         /// Credentials are granted
@@ -50,9 +51,9 @@ namespace SOAV
                     throw new Exception("Blank Parameters");
                 //Configuration
                 Path = $"{path}\\Configuration\\";
-                this.accessUserArray = OwnersSecret?.ToString().Split('|');
-                this.watchPassArray = Secrets?.ToString().Split('|');
-                this.expiryAlertArray = SecretsExpiry?.ToString().Split('|');
+                this.accessUserArray = OwnersSecret?.ToString().Split(Delimiter);
+                this.watchPassArray = Secrets?.ToString().Split(Delimiter);
+                this.expiryAlertArray = SecretsExpiry?.ToString().Split(Delimiter);
                 IsConfigValid = true;
             }
             catch (Exception ex)
