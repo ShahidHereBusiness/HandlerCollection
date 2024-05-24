@@ -13,7 +13,7 @@ namespace SOAV
     public static class XMLObjectSOA
     {
         /// <summary>
-        /// Object to SOAP string
+        /// Object to XML formatted String
         /// </summary>
         /// <typeparam name="T">Source Object Type</typeparam>
         /// <param name="obj">Objecr</param>
@@ -31,22 +31,7 @@ namespace SOAV
             }
         }
         /// <summary>
-        /// SOAP string to Object
-        /// </summary>
-        /// <typeparam name="T">Target Object Type</typeparam>
-        /// <param name="xmlString">string</param>
-        /// <returns>Object</returns>
-        public static T DeserializeXmlToObject<T>(string xmlString)
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
-
-            using (StringReader reader = new StringReader(xmlString))
-            {
-                return (T)serializer.Deserialize(reader);
-            }
-        }
-        /// <summary>
-        /// Object with Tag xmlns Information to XML
+        /// Object with Tag xmlns Information to XML formatted String
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
@@ -73,6 +58,20 @@ namespace SOAV
                 return stream.ToString().Replace("_x003A_", ":");
             }
         }
+        /// <summary>
+        /// SOAP string to Object
+        /// </summary>
+        /// <typeparam name="T">Target Object Type</typeparam>
+        /// <param name="xmlString">string</param>
+        /// <returns>Object</returns>
+        public static T DeserializeXmlToObject<T>(string xmlString)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
 
+            using (StringReader reader = new StringReader(xmlString))
+            {
+                return (T)serializer.Deserialize(reader);
+            }
+        }
     }
 }

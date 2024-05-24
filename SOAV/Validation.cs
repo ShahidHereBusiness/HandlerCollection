@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Configuration;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -83,6 +84,40 @@ namespace SOAV
             if (str.Length < 3)
                 return true;
             return false;
+        }
+        /// <summary>
+        /// Solution Developer:
+        /// Not Null or Empty or Not Count zero
+        /// </summary>
+        /// <typeparam name="T">Object Type</typeparam>
+        /// <param name="obj">Object to Validate</param>
+        /// <returns></returns>
+        public static bool TypeError<T>(T obj)
+        {
+            if (obj == null)
+                return true;
+
+            if (obj is string str)
+                return string.IsNullOrEmpty(str);
+
+            if (obj is ICollection collection)
+                return (collection.Count == 0);
+
+            var type = typeof(T);
+            if (Nullable.GetUnderlyingType(type) != null)
+                return obj.Equals(default(T));
+
+            return (obj == null);
+        }
+        /// <summary>
+        /// Remove any special character from file name and folder path
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string RationalizePath(string str)
+        {
+            string pattern = @"[^a-zA-Z0-9]";
+            return Regex.Replace(str, pattern, string.Empty);
         }
         /// <summary>
         /// Solution Developer:

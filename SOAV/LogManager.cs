@@ -6,6 +6,7 @@ using System.Security.Policy;
 using static SOAV.Include.ExceptionMapping;
 using static SOAV.Include.Enumeration;
 using System.Reflection;
+using System.Web;
 
 namespace SOAV
 {
@@ -15,7 +16,7 @@ namespace SOAV
     /// </summary>
     public static class LogManager
     {
-        public static string RemoteAddress { get; set; }
+        private static readonly string RemoteAddress = Validation.RationalizePath(HttpContext.Current?.Request.ServerVariables["REMOTE_ADDR"] ?? "App");
         /// <summary>
         /// Solution Developer:
         /// File System application logging
@@ -37,8 +38,6 @@ namespace SOAV
                     return (int)ResponseEnum.FormatError;
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
-                if (!Validation.ErrorFormat(RemoteAddress))
-                    RemoteAddress = RemoteAddress.Replace(":", "_");
                 string path2 = path + DateTime.Now.ToString("yyyyMMddHH") + "_" + RemoteAddress + ".txt";
                 StreamWriter streamWriter = (File.Exists(path2) ? File.AppendText(path2) : File.CreateText(path2));
                 string expMsg = (exp != null) ? logMsg = $"{logMsg}{NewLine}{ExceptionDetails(exp)}" : string.Empty;

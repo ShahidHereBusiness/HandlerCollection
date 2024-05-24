@@ -15,16 +15,19 @@ namespace UTPSOAV
         public void TestMethod1FSLog()
         {
             int resultant;
-            //HandleRemoteAddress = "::1";
+            string TimeLog = $"{DateTime.Now:yyyyMMddHHmmssfffffff}{new Random(Guid.NewGuid().GetHashCode()).Next()}";            
             // Missed Fodler Reference atleats one postfix "\\"
-            resultant =FileSystemLog("UTP", "HelloWorld", "M|N|O|P");
+            resultant = FileSystemLog("UTP", "HelloWorld", "M|N|O|P");
             Console.WriteLine($"Resultant:{resultant}");// Return Overview
             // Request Logging
             resultant = FileSystemLog("UTP\\", "HelloWorld", "M|N|O|P");
             Console.WriteLine($"Resultant:{resultant}");// Return Overview
             // Response Logging
-            resultant = FileSystemLog("D:\\LOGS\\UTP\\", "HelloWorld", "M|N|O|P|R", true);
-            Console.WriteLine($"Resultant:{resultant}");// Return Overview            
+            resultant = FileSystemLog("D:\\DEVLOGS\\UTP\\", "HelloWorld", "M|N|O|P|R", true);
+            Console.WriteLine($"Resultant:{resultant}");// Return Overview
+            // Exception Logging
+            resultant = FileSystemLog("D:\\DEVLOGS\\UTP\\", "HelloWorld", $"{TimeLog}|M|N|O|P|R", true, new Exception("Time Trace"));
+            Console.WriteLine($"Resultant:{resultant}");// Return Overview 
         }
         /// <summary>
         /// Windows Application Logging
@@ -32,8 +35,7 @@ namespace UTPSOAV
         [TestMethod]
         public void TestMethod2ApplicationEventLog()
         {
-            Boolean flag;
-            RemoteAddress = "::1";
+            Boolean flag;            
             // Request Logging
             flag = EventViewerAppLog("M|N|O|P");
             Console.WriteLine($"Flag:{flag}");// Return Overview
