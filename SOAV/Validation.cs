@@ -92,7 +92,7 @@ namespace SOAV
         /// <typeparam name="T">Object Type</typeparam>
         /// <param name="obj">Object to Validate</param>
         /// <returns>True if Null or Empty or Zero Count</returns>
-        public static bool TypeError<T>(T obj)
+        public static bool ErrorType<T>(T obj)
         {
             if (obj == null)
                 return true;
