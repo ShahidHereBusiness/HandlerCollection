@@ -26,14 +26,14 @@ namespace SOAV.Component
         public static DateTime StartTime { get; set; }
         public static string LogID { get; set; }
         public static string LogPath { get; set; }
-        public static Dictionary<string, string> HEADERS { get; set; }
+        public static Dictionary<string, string> Headers { get; set; }
         public static bool SkipCertificate { get; set; }
         public static string BASIC_AUTH { get; set; }
         public static bool SPMContinue { get; set; }
         public static string WSSAccessSpecifier { get; set; }
         public static string WSSWatchWord { get; set; }
         public static SecurityProtocolType TLS { get; set; }
-        public static async Task<(Object, String)> ConnectServiceREST<I, R>(I requestObj, R responseObj)
+        public static async Task<(Object r, String str)> ConnectServiceREST<I, R>(I requestObj, R responseObj)
         {
             #region Validation & Initialization
             if (string.IsNullOrEmpty(ServiceName))
@@ -47,12 +47,12 @@ namespace SOAV.Component
             if (string.IsNullOrEmpty(LogID))
                 LogID = $"{DateTime.Now.ToString("yyyyMMddHHmmssfffffff")}{new Random(Guid.NewGuid().GetHashCode()).Next()}";
             if (string.IsNullOrEmpty(LogPath))
-                LogPath = "\\SOALog";
-            #endregion
+                LogPath = "\\SOALog";            
 
             string jsonResponse = string.Empty;
             string logResponse = string.Empty;
             string contentType = "application/json";
+            #endregion
             try
             {
                 #region Make Receipt Diminish
@@ -66,10 +66,11 @@ namespace SOAV.Component
                         httpClient.Timeout = TimeSpan.FromSeconds(TimeOut);
                     httpClient.BaseAddress = new Uri(ServiceUri);
                     httpClient.DefaultRequestHeaders.Accept.Clear();
+                    #region Flags
                     // Read all Header Pair
-                    if (HEADERS.Count > 0)
+                    if (!Validation.TypeError(Headers))
                     {
-                        foreach (var item in HEADERS)
+                        foreach (var item in Headers)
                             httpClient.DefaultRequestHeaders.Add(item.Key, item.Value);
                     }
                     // Basic Authentication
@@ -78,6 +79,7 @@ namespace SOAV.Component
                         string authHeaders = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{BASIC_AUTH}"));//UserName:Password
                         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authHeaders);
                     }
+                    #endregion
                     // Headers Content Type
                     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(contentType));
                     // Serialize Object to REST
@@ -116,11 +118,6 @@ namespace SOAV.Component
             {
                 #region Make Exception Diminish
                 logResponse = $"{ServiceName} VAS SOA Exception => Start Time: {StartTime}, LogID: {LogID}, TimeSpan:{(DateTime.Now - StartTime).ToString()}, Parameters: {JsonConvert.SerializeObject(responseObj)}";
-                ExceptionMapping.ErrorLineNo = ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7) ?? "";
-                ExceptionMapping.ErrorMsg = ex.GetType().Name.ToString() ?? "";
-                ExceptionMapping.ExType = ex.GetType().ToString() ?? "";
-                ExceptionMapping.ExURL = "::1" ?? "";
-                ExceptionMapping.ErrorLocation = ex.Message.ToString() ?? "";
                 LogManager.FileSystemLog(LogPath, "HttpClientSOA:ConnectServiceREST", logResponse, true, ex);
                 #endregion
             }
@@ -133,7 +130,7 @@ namespace SOAV.Component
             }
             return (null, "Unknown Error");
         }
-        public static async Task<(Object, String)> ConnectServiceSOAP<I, R>(I requestObj, R responseObj, Dictionary<string, string> Tags = null)
+        public static async Task<(Object r, String str)> ConnectServiceXML<I, R>(I requestObj, R responseObj, Dictionary<string, string> Tags = null)
         {
             #region Validation & Initialization
             if (string.IsNullOrEmpty(ServiceName))
@@ -141,17 +138,17 @@ namespace SOAV.Component
             if (string.IsNullOrEmpty(ServiceUri))
                 return (null, "ServiceUri Required");
             if (requestObj == null)
-                return (null, "Request Creation Required");
+                return (null, "Request Creation Instance Required");
             if (StartTime == null)
                 StartTime = DateTime.Now;
             if (string.IsNullOrEmpty(LogID))
                 LogID = $"{DateTime.Now.ToString("yyyyMMddHHmmssfffffff")}{new Random(Guid.NewGuid().GetHashCode()).Next()}";
             if (string.IsNullOrEmpty(LogPath))
                 LogPath = "\\SOALog";
-            #endregion
-
             string jsonResponse = string.Empty;
             string logResponse = string.Empty;
+            string contentType = "text/xml";
+            #endregion
             try
             {
                 #region Make Receipt Diminish
@@ -164,8 +161,7 @@ namespace SOAV.Component
                     if (TimeOut > 0)
                         httpClient.Timeout = TimeSpan.FromSeconds(TimeOut);
                     httpClient.BaseAddress = new Uri(ServiceUri);
-                    httpClient.DefaultRequestHeaders.Accept.Clear();
-                    string contentType = "text/xml";
+                    httpClient.DefaultRequestHeaders.Accept.Clear();                    
                     // Set the content type
                     httpClient.DefaultRequestHeaders.Add("ContentType", contentType);
                     // Serialize Object to SOAP
@@ -173,15 +169,17 @@ namespace SOAV.Component
                     HttpContent content = new StringContent(contentData, Encoding.UTF8, contentType);
                     // Create a new HttpRequestMessage
                     HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, ServiceUri);
+                    #region Flags
                     // Add WS-Security header
                     if (!string.IsNullOrEmpty(WSSAccessSpecifier) && !string.IsNullOrEmpty(WSSWatchWord))
                         request.Headers.Add("X-WSSE", $"UsernameToken Username=\"{WSSAccessSpecifier}\", Password=\"{WSSWatchWord}\"");
                     // Read all Header Pair
-                    if (HEADERS.Count > 0)
+                    if (!Validation.TypeError(Headers))
                     {
-                        foreach (var item in HEADERS)
+                        foreach (var item in Headers)
                             request.Headers.Add(item.Key, item.Value);
                     }
+                    #endregion
                     // Set the content
                     request.Content = content;
                     #region SPM
@@ -194,6 +192,7 @@ namespace SOAV.Component
                     if (SkipCertificate)
                         ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;// Supress SSL Certificate
                     #endregion
+
                     // Send a POST await request
                     HttpResponseMessage msg = await httpClient.SendAsync(request).ConfigureAwait(false);
                     // Read POST Web Response                    
@@ -215,11 +214,6 @@ namespace SOAV.Component
             {
                 #region Make Exception Diminish
                 logResponse = $"{ServiceName} SOAP SOA Exception => Start Time: {StartTime}, LogID: {LogID}, TimeSpan:{(DateTime.Now - StartTime).ToString()}, Parameters: {SerializeObjectToXml(responseObj)}";
-                ExceptionMapping.ErrorLineNo = ex.StackTrace.Substring(ex.StackTrace.Length - 7, 7) ?? "";
-                ExceptionMapping.ErrorMsg = ex.GetType().Name.ToString() ?? "";
-                ExceptionMapping.ExType = ex.GetType().ToString() ?? "";
-                ExceptionMapping.ExURL = "::1" ?? "";
-                ExceptionMapping.ErrorLocation = ex.Message.ToString() ?? "";
                 LogManager.FileSystemLog(LogPath, "HttpClientSOA:ConnectServiceSOAP", logResponse, true, ex);
                 #endregion
             }
