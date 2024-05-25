@@ -14,7 +14,7 @@ namespace SOAV
     {
         /// <summary>
         /// Solution Developer:
-        /// Credentials Validation from System.Configuration.ConfigurationManager.AppSettings
+        /// Return True on Error: Credentials Validation from System.Configuration.ConfigurationManager.AppSettings
         /// </summary>
         /// <param name="sh">AccessSpecifier and WatchWord min length 8
         /// OwnersSecret are required
@@ -52,7 +52,7 @@ namespace SOAV
         }
         /// <summary>
         /// Solution Developer:
-        /// Email format
+        /// Return True for Invalid Email format
         /// </summary>
         /// <param name="mail">Email Address</param>
         /// <param name="encrypt">Is AES true or false</param>
@@ -71,9 +71,9 @@ namespace SOAV
         }
         /// <summary>
         /// Solution Developer:
-        /// String with at length 3
+        /// Return True if String Null, Empty or length less than 3
         /// </summary>
-        /// <param name="str">Not Null or Empty</param>
+        /// <param name="str">string</param>
         /// <returns></returns>
         public static bool ErrorFormat(string str)
         {
@@ -87,11 +87,11 @@ namespace SOAV
         }
         /// <summary>
         /// Solution Developer:
-        /// Not Null or Empty or Not Count zero
+        /// Returns True if Object Null or Empty or Count zero
         /// </summary>
         /// <typeparam name="T">Object Type</typeparam>
         /// <param name="obj">Object to Validate</param>
-        /// <returns></returns>
+        /// <returns>True if Null or Empty or Zero Count</returns>
         public static bool TypeError<T>(T obj)
         {
             if (obj == null)
@@ -110,7 +110,7 @@ namespace SOAV
             return (obj == null);
         }
         /// <summary>
-        /// Remove any special character from file name and folder path
+        /// Remove any special character from file name
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
@@ -121,7 +121,7 @@ namespace SOAV
         }
         /// <summary>
         /// Solution Developer:
-        /// Error when empty or null
+        /// Return True: When Content empty or null
         /// </summary>
         /// <param name="FileContent">Array length > 0</param>
         /// <param name="FileName">Not Null or Empty</param>

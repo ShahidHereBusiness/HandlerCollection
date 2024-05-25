@@ -68,7 +68,7 @@ namespace SOAV.Component
                     httpClient.DefaultRequestHeaders.Accept.Clear();
                     #region Flags
                     // Read all Header Pair
-                    if (!Validation.TypeError(Headers))
+                    if (!Validation.ErrorType(Headers))
                     {
                         foreach (var item in Headers)
                             httpClient.DefaultRequestHeaders.Add(item.Key, item.Value);
@@ -174,7 +174,7 @@ namespace SOAV.Component
                     if (!string.IsNullOrEmpty(WSSAccessSpecifier) && !string.IsNullOrEmpty(WSSWatchWord))
                         request.Headers.Add("X-WSSE", $"UsernameToken Username=\"{WSSAccessSpecifier}\", Password=\"{WSSWatchWord}\"");
                     // Read all Header Pair
-                    if (!Validation.TypeError(Headers))
+                    if (!Validation.ErrorType(Headers))
                     {
                         foreach (var item in Headers)
                             request.Headers.Add(item.Key, item.Value);
