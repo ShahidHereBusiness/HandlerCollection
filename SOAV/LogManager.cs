@@ -33,12 +33,12 @@ namespace SOAV
             {
                 if (string.IsNullOrEmpty(path))
                     return (int)ResponseEnum.FormatError;
-                path += DateTime.Now.Year + "\\" + DateTime.Now.Month + "\\" + DateTime.Now.Day + "\\";
+                path += $"{DateTime.Now:yyyy\\MM\\dd\\}";
                 if (!path.Substring(path.Length - 1).Contains("\\"))
                     return (int)ResponseEnum.FormatError;
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
-                string path2 = path + DateTime.Now.ToString("yyyyMMddHH") + "_" + RemoteAddress + ".txt";
+                string path2 = $"{path}{DateTime.Now:yyyyMMddHH}_{RemoteAddress}.txt";
                 StreamWriter streamWriter = (File.Exists(path2) ? File.AppendText(path2) : File.CreateText(path2));
                 string expMsg = (exp != null) ? logMsg = $"{logMsg}{NewLine}{ExceptionDetails(exp)}" : string.Empty;
                 streamWriter.WriteLine($"{MethodName},{((IsResponse) ? "Response" : "Receipt")}|{logMsg}");
@@ -46,7 +46,7 @@ namespace SOAV
             }
             catch (Exception ex)
             {
-                if (!EventViewerAppLog(MethodName + "\r\n" + logMsg + "\r\n" + ex.Message, true, "Application", 5175, 101))
+                if (!EventViewerAppLog($"{MethodName}{NewLine}{logMsg}{NewLine}{ex.Message}", true, "Application", 5175, 101))
                     return (int)ResponseEnum.FileSystemLogFailure;
                 return (int)ResponseEnum.UnexpectedFailure;
             }
