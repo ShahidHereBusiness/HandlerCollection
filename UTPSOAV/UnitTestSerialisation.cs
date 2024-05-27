@@ -25,20 +25,8 @@ namespace UTPSOAV
                 Info = "Success"
             };
 
-            Inbound.MakeCallResult r = new Inbound.MakeCallResult
-            {
-                Error = false,
-                Data = new Inbound.Data
-                {
-                    Code = "1",
-                    Message = "Send"
-                },
-                Request = new Inbound.Request
-                {
-                    Code = "1",
-                    Info = "Send"
-                }
-            };
+            Inbound.MakeCallResult r = new Inbound.MakeCallResult { };
+            
             #endregion
             string msg = JsonConvert.SerializeObject(e);
             Console.WriteLine($"Request Sent:{Environment.NewLine}{msg}{Environment.NewLine}");
@@ -71,29 +59,8 @@ namespace UTPSOAV
                     }
                 }
             };
-            Inbound.Envelope r = new Inbound.Envelope
-            {
-                Body = new Inbound.Body
-                {
-                    MakeCallResponse = new Inbound.MakeCallResponse
-                    {
-                        MakeCallResult = new Inbound.MakeCallResult
-                        {
-                            Error = false,
-                            Data = new Inbound.Data
-                            {
-                                Code = "1",
-                                Message = "Send"
-                            },
-                            Request = new Inbound.Request
-                            {
-                                Code = "1",
-                                Info = "Send"
-                            }
-                        }
-                    }
-                }
-            };
+            Inbound.Envelope r = new Inbound.Envelope { };
+            
             #endregion
             Dictionary<string, string> Tags = new Dictionary<string, string>
                 { {"xsi","http://www.w3.org/2001/XMLSchema-instance"},
@@ -106,6 +73,7 @@ namespace UTPSOAV
             Component.ServiceUri = "http://localhost:8080/Webservice/WebService/";
             // Make Call
             (Object rsl, string str) = Component.ConnectServiceXML<Outbound.Envelope, Inbound.Envelope>(e, r, Tags).GetAwaiter().GetResult();
+            r = (Inbound.Envelope)rsl;
             Console.WriteLine($"Response Received:{str}{Environment.NewLine}");
             
             if (r.Body.MakeCallResponse.MakeCallResult.Request.GetStatus())//Localized
