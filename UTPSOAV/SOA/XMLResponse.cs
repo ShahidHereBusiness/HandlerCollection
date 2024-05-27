@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Controls;
+using System.Windows.Media.Animation;
 using System.Xml.Serialization;
+using Indorse = SOAV.Validation;
 
-namespace SOA.XML.Response
+namespace SOA.XML.MakeResponse
 {
     [XmlRoot(ElementName = "Envelope", Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
     public class Envelope
@@ -72,5 +75,18 @@ namespace SOA.XML.Response
 
         [XmlElement(ElementName = "Info")]
         public string Info { get; set; }
+        private bool Status { get; set; }//Localize
+        /// <summary>
+        /// Return True if Response is desirable
+        /// </summary>
+        /// <returns></returns>
+        public bool GetStatus()//Localize
+        {
+            if (Indorse.ErrorType(Info) || Indorse.ErrorType(Code))
+                Status = false;
+            else
+                Status = true;
+            return Status;
+        }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using Outbound = SOA.XML.MakeRequest;
+using Inbound = SOA.XML.MakeResponse;
+using Component = SOAV.Component.HttpClientSOA;
+using Serial = SOAV.XMLObjectSOA;
 
 namespace UTPSOAV
 {
@@ -12,55 +14,56 @@ namespace UTPSOAV
     /// </summary>
     [TestClass]
     public class UnitTestSerialisation
-    {        
+    {
         [TestMethod]
         public void TestMethodREST()
         {
             #region Create an instance
-
-
-            SOA.XML.Request.Request e = new SOA.XML.Request.Request
+            Outbound.Request e = new Outbound.Request
             {
                 Code = "0",
                 Info = "Success"
             };
 
-            SOA.XML.Response.MakeCallResult r = new SOA.XML.Response.MakeCallResult
+            Inbound.MakeCallResult r = new Inbound.MakeCallResult
             {
                 Error = false,
-                Data = new SOA.XML.Response.Data
+                Data = new Inbound.Data
                 {
                     Code = "1",
                     Message = "Send"
                 },
-                Request = new SOA.XML.Response.Request
+                Request = new Inbound.Request
                 {
                     Code = "1",
                     Info = "Send"
                 }
             };
-            
             #endregion
             string msg = JsonConvert.SerializeObject(e);
             Console.WriteLine($"Request Sent:{Environment.NewLine}{msg}{Environment.NewLine}");
             // Make Call
-            SOAV.Component.HttpClientSOA.ServiceName = "Demo REST Service";
-            SOAV.Component.HttpClientSOA.ServiceUri = "http://localhost:8080/RestService/Host/MakeCall";
-            (Object rsl, string str) = SOAV.Component.HttpClientSOA.ConnectServiceREST<SOA.XML.Request.Request, SOA.XML.Response.MakeCallResult>(e, r).GetAwaiter().GetResult();
+            Component.ServiceName = "Demo REST Service";
+            Component.ServiceUri = "http://localhost:8080/RestService/Host/MakeCall";
+            (Object rsl, string str) = Component.ConnectServiceREST<Outbound.Request, Inbound.MakeCallResult>(e, r).GetAwaiter().GetResult();
             Console.WriteLine($"Response Received:{str}{Environment.NewLine}");
-            Console.WriteLine(JsonConvert.SerializeObject(rsl));
+            r = (Inbound.MakeCallResult)rsl;
+            if (r.Request.GetStatus())//Localize
+                Console.WriteLine(JsonConvert.SerializeObject(r));
+            else
+                Console.WriteLine("Response Invalidated");
         }
         [TestMethod]
         public void TestMethodXML()
         {
             #region Create an instance
-            SOA.XML.Request.Envelope e = new SOA.XML.Request.Envelope
+            Outbound.Envelope e = new Outbound.Envelope
             {
-                Body = new SOA.XML.Request.Body
+                Body = new Outbound.Body
                 {
-                    MakeCall = new SOA.XML.Request.MakeCall
+                    MakeCall = new Outbound.MakeCall
                     {
-                        Request = new SOA.XML.Request.Request
+                        Request = new Outbound.Request
                         {
                             Code = "0",
                             Info = "Success"
@@ -68,21 +71,21 @@ namespace UTPSOAV
                     }
                 }
             };
-            SOA.XML.Response.Envelope r = new SOA.XML.Response.Envelope
+            Inbound.Envelope r = new Inbound.Envelope
             {
-                Body = new SOA.XML.Response.Body
+                Body = new Inbound.Body
                 {
-                    MakeCallResponse = new SOA.XML.Response.MakeCallResponse
+                    MakeCallResponse = new Inbound.MakeCallResponse
                     {
-                        MakeCallResult = new SOA.XML.Response.MakeCallResult
+                        MakeCallResult = new Inbound.MakeCallResult
                         {
                             Error = false,
-                            Data = new SOA.XML.Response.Data
+                            Data = new Inbound.Data
                             {
                                 Code = "1",
                                 Message = "Send"
                             },
-                            Request = new SOA.XML.Response.Request
+                            Request = new Inbound.Request
                             {
                                 Code = "1",
                                 Info = "Send"
@@ -97,14 +100,18 @@ namespace UTPSOAV
                   {"xsd","http://www.w3.org/2001/XMLSchema"},
                 { "soap","http://schemas.xmlsoap.org/soap/envelope/"}
                 };
-            string msg = SOAV.XMLObjectSOA.SerializeObjectToXml(e, Tags);
+            string msg = Serial.SerializeObjectToXml(e, Tags);
             Console.WriteLine($"Request Sent:{Environment.NewLine}{msg}{Environment.NewLine}");
-            SOAV.Component.HttpClientSOA.ServiceName = "Demo Web Service";
-            SOAV.Component.HttpClientSOA.ServiceUri = "http://localhost:8080/Webservice/WebService.asmx";
+            Component.ServiceName = "Demo Web Service";
+            Component.ServiceUri = "http://localhost:8080/Webservice/WebService/";
             // Make Call
-            (Object rsl, string str) = SOAV.Component.HttpClientSOA.ConnectServiceXML<SOA.XML.Request.Envelope, SOA.XML.Response.Envelope>(e, r, Tags).GetAwaiter().GetResult();
+            (Object rsl, string str) = Component.ConnectServiceXML<Outbound.Envelope, Inbound.Envelope>(e, r, Tags).GetAwaiter().GetResult();
             Console.WriteLine($"Response Received:{str}{Environment.NewLine}");
-            Console.WriteLine(SOAV.XMLObjectSOA.SerializeObjectToXml(rsl, Tags));
+            
+            if (r.Body.MakeCallResponse.MakeCallResult.Request.GetStatus())//Localized
+                Console.WriteLine(Serial.SerializeObjectToXml(rsl, Tags));
+            else
+                Console.WriteLine("Response Invalidated");
         }
     }
 }
