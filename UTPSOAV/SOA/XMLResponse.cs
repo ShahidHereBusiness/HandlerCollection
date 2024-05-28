@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Xml.Serialization;
 using Indorse = SOAV.Validation;
+using Outbound = SOA.XML.MakeRequest;
 
 namespace SOA.XML.MakeResponse
 {
@@ -50,12 +51,12 @@ namespace SOA.XML.MakeResponse
         public Data Data { get; set; }
 
         [XmlElement(ElementName = "request")]
-        public Request Request { get; set; }
+        public Outbound.Request Request { get; set; }
 
         public MakeCallResult()
         {
             Data = new Data();
-            Request = new Request();
+            Request = new Outbound.Request();
         }
     }
 
@@ -66,15 +67,6 @@ namespace SOA.XML.MakeResponse
 
         [XmlElement(ElementName = "Message")]
         public string Message { get; set; }
-    }
-
-    public class Request
-    {
-        [XmlElement(ElementName = "Code")]
-        public string Code { get; set; }
-
-        [XmlElement(ElementName = "Info")]
-        public string Info { get; set; }
         private bool Status { get; set; }//Localize
         /// <summary>
         /// Return True if Response is desirable
@@ -82,7 +74,7 @@ namespace SOA.XML.MakeResponse
         /// <returns></returns>
         public bool GetStatus()//Localize
         {
-            if (Indorse.ErrorType(Info) || Indorse.ErrorType(Code))
+            if (Indorse.ErrorType(Message) || Indorse.ErrorType(Code))
                 Status = false;
             else
                 Status = true;
