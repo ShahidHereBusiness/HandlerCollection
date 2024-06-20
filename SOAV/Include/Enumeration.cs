@@ -1,4 +1,6 @@
-﻿namespace SOAV.Include
+﻿using System;
+
+namespace SOAV.Include
 {
     /// <summary>
     /// Solution Developer:
@@ -26,5 +28,30 @@
             Success = 0,
             UnexpectedFailure = 1
         }
+		/// <summary>
+		/// Solution Developer:
+		/// Get Integer Value of Enum Type
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="enumValue">Object</param>
+		/// <returns></returns>
+		public static int GetEnumValueId<T>(T enumValue) where T : Enum
+		{
+			return Convert.ToInt32(enumValue);
+		}
+		/// <summary>
+		/// Solution Developer:
+		/// Get Enum Object from Integer Input
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="id">int</param>
+		/// <returns></returns>
+		public static T GetEnumValue<T>(int id) where T : Enum
+		{
+			if (Enum.IsDefined(typeof(T), id))
+				return (T)(object)id;
+			else
+				return (T)(object)-2;
+		}
     }
 }
