@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOAV", "SOAV\SOAV.csproj", "{24FEAAAD-444A-4EEA-8F2B-ACE7A7E8CA72}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UTPSOAV", "UTPSOAV\UTPSOAV.csproj", "{161D6392-A413-4339-A895-7638F5BC3904}"
+	ProjectSection(ProjectDependencies) = postProject
+		{24FEAAAD-444A-4EEA-8F2B-ACE7A7E8CA72} = {24FEAAAD-444A-4EEA-8F2B-ACE7A7E8CA72}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
