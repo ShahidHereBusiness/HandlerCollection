@@ -54,7 +54,7 @@ namespace UTPSOAV
             #region Shared TID
             using (ILogManager log = new ILogManager())
             {
-                // Missed Fodler Reference atleats one postfix "\\"
+                // Missed Fodler Reference atleast one postfix "\\"
                 timeLog = log.FileSystemLog("UTP", "HelloWorld", "M|N|O|P", out string response);
                 Console.WriteLine($"Resultant:{response}, TID:{timeLog}");// Return Overview
                 // Request Logging
