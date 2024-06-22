@@ -49,12 +49,12 @@ namespace SOAV
                 string path2 = $"{path}{DateTime.Now:yyyyMMddHH}_{RemoteAddress}.txt";
                 StreamWriter streamWriter = (File.Exists(path2) ? File.AppendText(path2) : File.CreateText(path2));
                 string expMsg = (exp != null) ? logMsg = $"{logMsg}{NewLine}{ExceptionDetails(exp)}" : string.Empty;
-                streamWriter.WriteLine($"{MethodName},{((IsResponse) ? "Response" : "Receipt")}|{logMsg}");
+                streamWriter.WriteLine($"{MethodName},{((IsResponse) ? "Response" : "Receipt")}|{TID}|{logMsg}");
                 streamWriter.Close();
             }
             catch (Exception ex)
             {
-                EventViewerAppLog($"{MethodName}{NewLine}{logMsg}{NewLine}{ex.Message}", out bool response, true, "Application", 5175, 101);
+                EventViewerAppLog($"{TID}{NewLine}{MethodName}{NewLine}{logMsg}{NewLine}{ex.Message}", out bool response, true, "Application", 5175, 101);
                 if (!response)
                     ResponseMsg = ResponseEnum.FileSystemLogFailure.ToString();
                 ResponseMsg = ResponseEnum.UnexpectedFailure.ToString();
