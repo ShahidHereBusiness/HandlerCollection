@@ -33,7 +33,7 @@ namespace SOAV
             {
                 if (string.IsNullOrEmpty(path))
                     return (int)ResponseEnum.FormatError;
-                path += $"{DateTime.Now:yyyy\\MM\\dd\\}";
+                path += $"{DateTime.Now.ToString("yyyy")}\\{DateTime.Now.ToString("MM")}\\{DateTime.Now.ToString("dd")}\\";
                 if (!path.Substring(path.Length - 1).Contains("\\"))
                     return (int)ResponseEnum.FormatError;
                 if (!Directory.Exists(path))
